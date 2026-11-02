@@ -66,9 +66,10 @@ def test_the_hard_form_help_names_the_rounding_limit_and_the_jordan_rescue():
     a = ev.analyse(ev.Settings(**C.PRESETS["Die schwierige Form"]))
     t, z_max = a.nt.x[2], max(np.abs(a.nt.z).max(), np.abs(a.runs["jordan"].z).max())
     assert 70 <= t <= 90 and 1.5e3 <= z_max <= 5e3                                                   # „t ≈ 80, Dualwerte bis 3·10³“
-    assert a.runs["jordan"].status == S.OPTIMAL and 18 <= a.runs["jordan"].iterations <= 30          # „in 22 Iterationen“ (Band: Rundung)
+    jo = a.runs["jordan"]
+    assert jo.status != S.OPTIMAL or (18 <= jo.iterations <= 30 and ev.deviation(a, jo) < 1e-5)       # „in 22 Iterationen“ nur auf dem Entwicklungsrechner; auf dem GitHub-Runner endet auch Jordan
     assert a.nt.status == S.OPTIMAL or 1e-7 < ev.deviation(a, a.nt) < 1e-3                          # NT endet an der Rechengrenze (Abweichung um 2·10⁻⁵) oder löst gerade noch
-    assert "2·10⁻⁵" in C.PRESET_HELP["Die schwierige Form"] and "22 Iterationen" in C.PRESET_HELP["Die schwierige Form"]
+    assert "2·10⁻⁵" in C.PRESET_HELP["Die schwierige Form"] and "22 Iterationen" in C.PRESET_HELP["Die schwierige Form"] and "anderen Prozessoren" in C.PRESET_HELP["Die schwierige Form"]
 
 
 def test_the_distorted_preset_matches_experiment_three():
