@@ -258,8 +258,8 @@ st.markdown(
     """
 | Annahme | Was passiert, wenn sie verletzt ist | Wer setzt an |
 |---|---|---|
-| **Der Jordan-Schritt „bricht“ im PSD-Kegel** | Nicht auf diesen Programmen: er löst alle Zufallsprogramme und braucht weniger Iterationen als der skalierte Schritt. Ihm fehlen Invarianz und Theorie, nicht die Läufe. | – |
-| **Die Skalierung macht den Löser robuster** | Sie macht die Iterationszahl invariant, nicht die Erfolgsquote: bei großer Verzerrung κ scheitern in diesem Prototyp mit NT mehr Läufe als mit Jordan (Experiment 3). | – |
+| **Der Jordan-Schritt „bricht“ im PSD-Kegel** | Nicht auf diesen Programmen: er löst alle Zufallsprogramme und braucht in den Mischungen mit Lorentz- oder PSD-Kegel weniger Iterationen als der skalierte Schritt (im Orthant gleich viele). Ihm fehlen Invarianz und Theorie; bei stark verzerrten Programmen gelingen aber auch seine Läufe nur zum Teil (Experiment 3: 2 von 10 bei κ = 10⁶). | – |
+| **Die Skalierung macht den Löser robuster** | Sie hält die Iterationszahl bis κ = 10⁴ gleich, nicht die Erfolgsquote: bei κ = 10⁴ scheiterten in der Stichprobe von 10 Programmen 6 NT-Läufe gegen 1 mit Jordan (bei κ = 10⁶ gelingen nur 1 gegen 2 von 10, bei κ = 100 NT 10 gegen Jordan 9; Experiment 3). | – |
 | **Die achsenparallele Ellipse** | `t ≥ 1/p` mit `t ≈ 80` und Dualwerten bis 3·10³ endet an der Rechengenauigkeit; Primal und Dual stimmen auf 10⁻⁵ bis 10⁻⁷, nicht auf 10⁻⁸. Ruiz-Äquilibrierung und ein Rückfall auf Zentrierung helfen nicht (gemessen, nicht eingebaut). | – |
 | **Ein Zertifikat liegt vor, wenn der Lauf endet** | Bei Programmen ohne Slater-Punkt und unzulässigen Programmen läuft ein Iterat davon; das Lückenbeispiel hat den Wert −1, das schwach unzulässige Programm keinen Abschluss und kein Zertifikat. Eine homogene Einbettung würde das sauber melden (nicht gebaut). | – |
 | **Eine Iteration kostet wenig** | Ein dichtes KKT-System der Größe Zeilen + Variablen je Iteration; der Vergleich mit der Barriere zählt Iterationen, keine Zeit. | – |
@@ -283,7 +283,7 @@ $\begin{pmatrix} 0 & A^\top \\ A & -L(z)^{-1}L(s) \end{pmatrix}$. Die Matrix $L(
 **NT-Skalierung.** Es gibt genau ein symmetrisch positiv definites $W$ mit $W z = W^{-1} s =: \lambda$ und $W K = K$. Orthant: $W = \operatorname{diag}\sqrt{s/z}$. PSD: $W = S^{1/2}(S^{1/2} Z S^{1/2})^{-1/2} S^{1/2}$ (also $WZW = S$), wirkend als $X \mapsto W^{1/2} X W^{1/2}$.
 Lorentz: $w = (\hat s + J\hat z)/\sqrt{2(1 + \hat s^\top \hat z)}$ mit $\hat s = s/\sqrt{s^\top J s}$, $J = \operatorname{diag}(1, -I)$, und $W^2 = \beta^2 (2 w w^\top - J)$, $\beta^2 = \sqrt{s^\top J s / z^\top J z}$.
 Im skalierten Raum lautet die Gleichung $\lambda \circ (W\Delta z + W^{-1}\Delta s) = \sigma\mu e - \lambda \circ \lambda - \Delta\tilde s_{\mathrm{aff}} \circ \Delta\tilde z_{\mathrm{aff}}$ mit $\Delta\tilde s = W^{-1}\Delta s$, $\Delta\tilde z = W \Delta z$ (Mehrotra-Korrektor); das KKT-System ist
-$\begin{pmatrix} 0 & A^\top \\ A & -W^2 \end{pmatrix}$, symmetrisch. Die Richtung ist invariant unter den Automorphismen des Kegels (ein Automorphismus $\mathcal{T}$ ersetzt $A, b$ durch $\mathcal{T}A, \mathcal{T}b$ und $z$ durch $\mathcal{T}^{-\top}z$).
+$\begin{pmatrix} 0 & A^\top \\ A & -W^2 \end{pmatrix}$, symmetrisch. Die Richtung ist in exakter Rechnung invariant unter den Automorphismen des Kegels (ein Automorphismus $\mathcal{T}$ ersetzt $A, b$ durch $\mathcal{T}A, \mathcal{T}b$ und $z$ durch $\mathcal{T}^{-\top}z$).
 
 **Schrittweite.** $\alpha_{\max}$ aus der Bedingung $\lambda + \alpha\,\Delta\tilde s \in K$ und $\lambda + \alpha\,\Delta\tilde z \in K$ (Orthant: Minimum über negative Komponenten; Lorentz: kleinste Nullstelle einer quadratischen Gleichung; PSD: kleinster Eigenwert von $\Lambda^{-1/2}\Delta\Lambda\,\Lambda^{-1/2}$); Schritt $0{,}99\,\alpha_{\max}$, höchstens 1; $\sigma = (1 - \alpha_{\mathrm{aff}})^3$.
 

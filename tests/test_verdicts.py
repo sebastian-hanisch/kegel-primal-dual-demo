@@ -92,7 +92,7 @@ def test_commutator_verdict_names_the_hand_values_and_the_peak():
     res = {"form": "ball_psd", "substitute": False, "rows": [{"it": 0, "ratio": 1e-17, "gap": 1.0}, {"it": 3, "ratio": 0.14, "gap": 0.1}, {"it": 9, "ratio": 0.02, "gap": 1e-9}]}
     kind, text = ev.verdict_commutator(res, hand)
     assert kind == "info"
-    for part in ("S Z = [[2, 2], [1, 2]]", "Z S = [[2, 1], [2, 2]]", "antisymmetrische Anteil hat die Norm 0,707", "bei ‖S Z‖ = 3,606", "von 1,0·10⁻¹⁷ am Start auf höchstens **0,14** (Iteration 3)", "Kugel (PSD-Kegel)"):
+    for part in ("S Z = [[2, 2], [1, 2]]", "Z S = [[2, 1], [2, 2]]", "antisymmetrische Anteil hat die Norm 0,707", "bei ‖S Z‖ = 3,606", "von 1,0·10⁻¹⁷ am Start auf höchstens **0,14** (Iteration 3, am ersten PSD-Block gemessen", "Kugel (PSD-Kegel)"):
         assert part in text, part
     assert "keinen PSD-Kegel" not in text and "Entlang des NT-Laufs der Form Kugel (PSD-Kegel) wächst" in text
     assert "Die gewählte Form hat keinen PSD-Kegel; entlang des NT-Laufs der PSD-Kugel derselben Wolke wächst" in ev.verdict_commutator({**res, "substitute": True}, hand)[1]
@@ -122,7 +122,7 @@ def test_invariance_verdict_compares_kappa_one_with_the_chosen_kappa():
     kind, text = ev.verdict_invariance(_inv_rows(), 10000)
     assert kind == "info"
     for part in ("κ = 1·10⁴ umgeschrieben", "NT bei κ = 1: 10/10 gelöst, Median 8,5 Iterationen, bei κ = 1·10⁴: 4/10 gelöst, Median 8,5 Iterationen",
-                 "Jordan bei κ = 1: 10/10 gelöst, Median 7,0 Iterationen, bei κ = 1·10⁴: 9/10 gelöst, Median 7,0 Iterationen", "hängt nicht an κ"):
+                 "Jordan bei κ = 1: 10/10 gelöst, Median 7,0 Iterationen, bei κ = 1·10⁴: 9/10 gelöst, Median 7,0 Iterationen", "bis κ = 10⁴ nicht an κ"):
         assert part in text, part
     assert "0/10 gelöst;" in ev.verdict_invariance(_inv_rows(), 1000000)[1] and "Median None" not in text
 

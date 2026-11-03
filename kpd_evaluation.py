@@ -298,7 +298,7 @@ def verdict_random(rows: list) -> tuple:
         by = {r["scaling"]: r for r in rows if r["mix"] == name}
         parts.append(f"{name}: wörtlich {by['vector']['solved']}/{by['vector']['count']}, Jordan {by['jordan']['solved']}/{by['jordan']['count']} (Median {de(by['jordan']['median'], 1) if by['jordan']['median'] is not None else '–'}), "
                      f"NT {by['nt']['solved']}/{by['nt']['count']} (Median {de(by['nt']['median'], 1) if by['nt']['median'] is not None else '–'})")
-    return "info", "Zufallsprogramme (streng zulässig durch Konstruktion), gelöste Läufe von je " + str(rows[0]["count"]) + ": " + "; ".join(parts) + ". Der Jordan-Schritt braucht hier **weniger** Iterationen als der skalierte."
+    return "info", "Zufallsprogramme (streng zulässig durch Konstruktion), gelöste Läufe von je " + str(rows[0]["count"]) + ": " + "; ".join(parts) + ". Der Jordan-Schritt braucht in den Mischungen mit Lorentz- oder PSD-Kegel **weniger** Iterationen als der skalierte (im Orthant gleich viele)."
 
 
 def verdict_commutator(res: dict, hand: dict) -> tuple:
@@ -306,7 +306,7 @@ def verdict_commutator(res: dict, hand: dict) -> tuple:
     lead = "Die gewählte Form hat keinen PSD-Kegel; entlang des NT-Laufs der PSD-Kugel derselben Wolke" if res["substitute"] else f"Entlang des NT-Laufs der Form {A.FORM_NAMES[res['form']]}"
     return "info", (f"Von Hand: für S = diag(2, 1) und Z = [[1, 1], [1, 2]] ist S Z = [[2, 2], [1, 2]], aber Z S = [[2, 1], [2, 2]]; der antisymmetrische Anteil hat die Norm {de(hand['antisym_norm'], 3)} "
                     f"bei ‖S Z‖ = {de(hand['SZ_norm'], 3)}. {lead} wächst ‖S Z − Z S‖ / (‖S‖ ‖Z‖) von {sci(res['rows'][0]['ratio'])} am Start auf höchstens "
-                    f"**{de(peak['ratio'], 2)}** (Iteration {peak['it']}): der Teil des Produkts, den eine Symmetrisierung wegwirft, ist nicht klein.")
+                    f"**{de(peak['ratio'], 2)}** (Iteration {peak['it']}, am ersten PSD-Block gemessen; gegen Ende fällt der Wert wieder): der Teil des Produkts, den eine Symmetrisierung wegwirft, ist nicht klein.")
 
 
 def verdict_identities(rows: list) -> tuple:
@@ -323,7 +323,7 @@ def verdict_invariance(rows: list, kappa: int) -> tuple:
     jo1, jok = cell("jordan", 1), cell("jordan", kappa)
     fmt = lambda c: f"{c['solved']}/{c['count']} gelöst" + (f", Median {de(c['median'], 1)} Iterationen" if c["median"] is not None else "")
     return "info", (f"Zwei PSD-Blöcke 3×3, mit einem Automorphismus der Kondition κ = {sci(float(kappa), 0)} umgeschrieben (Start mitgenommen): NT bei κ = 1: {fmt(nt1)}, bei κ = {sci(float(kappa), 0)}: {fmt(ntk)}; "
-                    f"Jordan bei κ = 1: {fmt(jo1)}, bei κ = {sci(float(kappa), 0)}: {fmt(jok)}. Die Iterationszahl des skalierten Schritts hängt nicht an κ; wie viele Läufe numerisch gelingen, tut es.")
+                    f"Jordan bei κ = 1: {fmt(jo1)}, bei κ = {sci(float(kappa), 0)}: {fmt(jok)}. Die Iterationszahl des skalierten Schritts hängt für gelungene Läufe bis κ = 10⁴ nicht an κ (bei κ = 10⁶ stammt der Median aus sehr wenigen Läufen); wie viele Läufe numerisch gelingen, tut es.")
 
 
 def verdict_nu(rows: list, drows: list) -> tuple:
