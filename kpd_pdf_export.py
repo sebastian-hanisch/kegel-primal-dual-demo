@@ -6,7 +6,7 @@ from fpdf import FPDF
 
 import kpd_constants as C
 import kpd_forms as A
-from kpd_evaluation import Analysis, de, sci, status_text
+from kpd_evaluation import Analysis, de, relative, sci, status_text
 
 _REPLACE = {"→": "->", "–": "-", "—": "-", "−": "-", "≤": "<=", "≥": ">=", "·": "*", "×": "x", "ν": "nu", "λ": "lambda", "κ": "kappa", "€": "EUR", "⁻": "-", "⁰": "0", "¹": "1", "²": "2", "³": "3",
             "⁴": "4", "⁵": "5", "⁶": "6", "⁷": "7", "⁸": "8", "⁹": "9", "„": '"', "“": '"', "ᵀ": "^T", "∘": "o", "√": "sqrt"}
@@ -30,7 +30,7 @@ def build_pdf(a: Analysis) -> bytes:
     pdf.multi_cell(0, 5, _s(f"Form: {A.FORM_NAMES[s.form]}; Wolke: {s.n} Punkte, Streckung {de(s.stretch, 1)}, um {s.angle} Grad gedreht, Seed {s.seed}. Referenzwert der Barriere: {de(a.reference, 6)}. Alles simuliert."),
                    new_x="LMARGIN", new_y="NEXT")
     pdf.ln(3)
-    head, widths = ["Richtung", "Ausgang", "Iterationen", "Primal", "Dual", "Lücke c^T x + b^T z", "Abweichung"], [66, 56, 24, 34, 34, 40, 24]
+    head, widths = ["Richtung", "Ausgang", "Iterationen", "Primal", "Dual", "Lücke c^T x + b^T z", "Abweichung", "relativ"], [60, 50, 22, 32, 32, 38, 22, 22]
     pdf.set_font("Helvetica", "B", 9)
     for h, w in zip(head, widths):
         pdf.cell(w, 6, _s(h), border=1)
@@ -38,7 +38,7 @@ def build_pdf(a: Analysis) -> bytes:
     pdf.set_font("Helvetica", "", 9)
     for sc in ("vector", "jordan", "nt"):
         r = a.runs[sc]
-        for v, w in zip([C.SCALING_NAMES[sc], status_text(r.status), r.iterations, de(r.value, 6), de(r.dual_value, 6), sci(abs(r.certificate_gap)), sci(abs(r.value - a.reference))], widths):
+        for v, w in zip([C.SCALING_NAMES[sc], status_text(r.status), r.iterations, de(r.value, 6), de(r.dual_value, 6), sci(abs(r.certificate_gap)), sci(abs(r.value - a.reference)), sci(relative(abs(r.value - a.reference), a.reference))], widths):
             pdf.cell(w, 5.5, _s(v), border=1)
         pdf.ln()
     pdf.ln(3)

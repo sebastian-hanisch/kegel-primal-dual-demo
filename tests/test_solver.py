@@ -147,3 +147,21 @@ def test_single_thread_and_no_warnings(recwarn):
     prob = F.build_form("ellipse_axis", make_cloud(20, 4.0, 45, 35).points)
     S.solve_pd(prob, max_iter=30)
     assert not [w for w in recwarn if issubclass(w.category, RuntimeWarning)]                         # Überläufe beim Davonlaufen bleiben still
+
+
+def test_the_tolerance_is_relative_and_a_reported_success_meets_it_on_every_form():
+    """Das Abbruchkriterium ist relativ (Lücke sᵀz ≤ tol · max(1, |cᵀx|)): ein gemeldeter Erfolg weicht vom unabhängigen Referenzwert (Barriere, Lücke 10⁻¹²) relativ um höchstens
+    10 · tol ab. Absolut sind es bei Werten um 134 (achsenparallele Ellipse) mehr als tol: 4,8·10⁻⁷ sind relativ 3,6·10⁻⁹, kein Fehler des Kriteriums. Der Status bleibt ungeprüft (CPU-abhängig)."""
+    import kpd_evaluation as ev
+
+    cloud = make_cloud(20, 4.0, 45, 35)
+    for form in F.FORMS:
+        prob = F.build_form(form, cloud.points)
+        ref = K.solve_barrier(prob, tol=1e-12).value
+        for sc in ("nt", "jordan"):
+            r = S.solve_pd(prob, tol=1e-8, scaling=sc)
+            if r.status != S.OPTIMAL:
+                continue
+            err = abs(r.value - ref)
+            assert ev.relative(err, ref) <= 10e-8, (form, sc, err)
+    assert ev.relative(4.8e-7, 134.265) == pytest.approx(3.575e-9, rel=1e-3) and ev.relative(3e-9, 0.5) == 3e-9       # unter 1 zählt absolut

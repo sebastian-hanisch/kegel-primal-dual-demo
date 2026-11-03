@@ -45,7 +45,7 @@ PRESET_HELP = {
     "Der Würfel: ein LP": "Ein reines LP: alle drei Schritte sind derselbe, weil das Jordan-Produkt im Orthant komponentenweise ist.",
     "Dieselbe Kugel als SDP": "Dieselbe Kugel als 3×3-Matrizen im PSD-Kegel: Matrixprodukte, die nicht kommutieren; der Vektor-Schritt bricht ab, Jordan und NT lösen sie.",
     "Allgemeine Ellipse (PSD)": "Die allgemeine Ellipse mit PSD-Kegel braucht etwa doppelt so viele Iterationen wie die Kugel, bleibt aber unter den Newton-Schritten der Barriere.",
-    "Die schwierige Form": "Die achsenparallele Ellipse als Lorentz-Kegel (t ≥ 1/p mit t ≈ 80, Dualwerte bis 3·10³): der NT-Lauf endet an der Rechengenauigkeit (Abweichung etwa 2·10⁻⁵); der Jordan-Schritt meldet sie auf dem Entwicklungsrechner nach 22 Iterationen als optimal (Abweichung 4,8·10⁻⁷, nicht 10⁻⁸), auf anderen Prozessoren kann auch er an der Rechengrenze enden.",
+    "Die schwierige Form": "Die achsenparallele Ellipse als Lorentz-Kegel (t ≥ 1/p mit t ≈ 80, Dualwerte bis 3·10³): der NT-Lauf endet an der Rechengenauigkeit (Abweichung etwa 2·10⁻⁵); der Jordan-Schritt meldet sie auf dem Entwicklungsrechner nach 22 Iterationen als optimal (Abweichung 4,8·10⁻⁷, relativ zum Wert 134 sind das 3,6·10⁻⁹: die Toleranz 10⁻⁸ gilt relativ), auf anderen Prozessoren kann auch er an der Rechengrenze enden.",
     "Stark verzerrt: κ = 10⁴": "Experiment 3 mit Verzerrung 10⁴: die NT-Iterationszahl bleibt gleich, aber auf dem verzerrten Programm gelingen weniger Läufe, beim Jordan-Schritt mehr.",
 }
 assert set(PRESETS) == set(PRESET_HELP) and all(p["form"] in A.FORMS and p["kappa"] in KAPPAS for p in PRESETS.values())

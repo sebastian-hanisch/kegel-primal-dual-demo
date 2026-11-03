@@ -94,6 +94,12 @@ def deviation(a: Analysis, result: S.PDResult) -> float:
     return abs(result.value - a.reference)
 
 
+def relative(error: float, reference: float) -> float:
+    """Abweichung im Maß des Abbruchkriteriums: |Abweichung| / max(1, |Referenzwert|). Der Löser bricht relativ ab (Lücke sᵀz ≤ tol · max(1, |cᵀx|)),
+    bei einem Wert von 134 sind 4,8·10⁻⁷ also 3,6·10⁻⁹ und unter der Toleranz 10⁻⁸."""
+    return error / max(1.0, abs(reference))
+
+
 # ----------------------------------------------------------------------------- Experiment 1: der LP-Schritt, Kegel für Kegel
 
 def variant_rows(s: Settings) -> list:
@@ -105,7 +111,7 @@ def variant_rows(s: Settings) -> list:
         ref = K.solve_barrier(prob, tol=1e-10).value
         for sc in S.SCALINGS:
             r = S.solve_pd(prob, tol=C.TOL, max_iter=C.MAX_ITER, scaling=sc)
-            rows.append({"form": form, "scaling": sc, "status": r.status, "iterations": r.iterations, "error": abs(r.value - ref), "certificate_gap": r.certificate_gap,
+            rows.append({"form": form, "scaling": sc, "status": r.status, "iterations": r.iterations, "error": abs(r.value - ref), "relative_error": relative(abs(r.value - ref), ref), "certificate_gap": r.certificate_gap,
                          "cones": "+".join(sorted({k for k, _ in prob.cones}))})
     return rows
 
@@ -276,7 +282,7 @@ def verdict_run(a: Analysis) -> tuple:
             f"der wörtlich übertragene LP-Schritt endet nach {ve.iterations} ({status_text(ve.status)}). Die Barriere aus Stück 5 braucht {a.barrier.newton_steps} Newton-Schritte in {a.barrier.rounds} Runden.")
     if nt.status == S.OPTIMAL:
         text += (f" Das Zertifikat des NT-Laufs: Primal {num(nt.value)}, Dual {num(nt.dual_value)}, Lücke cᵀx + bᵀz = {sci(abs(nt.certificate_gap))}; "
-                 f"Abweichung vom Referenzwert der Barriere {sci(deviation(a, nt))}.")
+                 f"Abweichung vom Referenzwert der Barriere {sci(deviation(a, nt))}, relativ {sci(relative(deviation(a, nt), a.reference))} (die Toleranz {sci(C.TOL, 0)} gilt relativ zu max(1, |Wert|)).")
         return "success", text
     return "warning", text + f" Der NT-Lauf ist nicht abgeschlossen (Lücke cᵀx + bᵀz = {sci(abs(nt.certificate_gap))}): das ist die Rechengrenze dieser Form, kein Wert, dem man trauen sollte."
 

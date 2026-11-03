@@ -29,7 +29,7 @@ def test_run_verdict_success_names_iterations_certificate_and_deviation():
     kind, text = ev.verdict_run(a)
     assert kind == "success"
     for part in ("**Kugel (Lorentz-Kegel)**", "NT-Schritt 11 Iterationen (gelöst)", "Jordan-Schritt 8 (gelöst)", "endet nach 6 (steht still (Schrittlänge 0))", "34 Newton-Schritte in 13 Runden",
-                 "Primal 2,0000, Dual 2,0000", "Lücke cᵀx + bᵀz = 1,3·10⁻⁹", "Abweichung vom Referenzwert der Barriere 3,0·10⁻¹⁰"):
+                 "Primal 2,0000, Dual 2,0000", "Lücke cᵀx + bᵀz = 1,3·10⁻⁹", "Abweichung vom Referenzwert der Barriere 3,0·10⁻¹⁰, relativ 1,5·10⁻¹⁰ (die Toleranz 1·10⁻⁸ gilt relativ zu max(1, |Wert|))"):
         assert part in text, part
 
 

@@ -192,7 +192,7 @@ st.caption("Alle sechs Formen derselben Wolke mit den drei Richtungen; darunter 
 vrows = _variants(_cloud_key(settings))
 st.plotly_chart(build_variants(vrows), width="stretch", key="variants_chart")
 st.dataframe(pd.DataFrame([{"Form": A.FORM_NAMES[r["form"]], "Richtung": C.SCALING_NAMES[r["scaling"]], "Ausgang": status_text(r["status"]), "Iterationen": r["iterations"],
-                            "Abweichung vom Referenzwert": sci(r["error"]), "Lücke cᵀx + bᵀz": sci(abs(r["certificate_gap"]))} for r in vrows]), hide_index=True, width="stretch")
+                            "Abweichung vom Referenzwert": sci(r["error"]), "relativ (Maß der Toleranz)": sci(r["relative_error"]), "Lücke cᵀx + bᵀz": sci(abs(r["certificate_gap"]))} for r in vrows]), hide_index=True, width="stretch")
 verdict(verdict_variants(vrows))
 rrows = _random()
 st.dataframe(pd.DataFrame([{"Kegelmischung": r["mix"], "Richtung": C.SCALING_NAMES[r["scaling"]], "gelöst": f"{r['solved']} von {r['count']}", "Iterationen (Median)": de(r["median"], 1) if r["median"] is not None else "–",
@@ -260,7 +260,7 @@ st.markdown(
 |---|---|---|
 | **Der Jordan-Schritt „bricht“ im PSD-Kegel** | Nicht auf diesen Programmen: er löst alle Zufallsprogramme und braucht in den Mischungen mit Lorentz- oder PSD-Kegel weniger Iterationen als der skalierte Schritt (im Orthant gleich viele). Ihm fehlen Invarianz und Theorie; bei stark verzerrten Programmen gelingen aber auch seine Läufe nur zum Teil (Experiment 3: 2 von 10 bei κ = 10⁶). | – |
 | **Die Skalierung macht den Löser robuster** | Sie hält die Iterationszahl bis κ = 10⁴ gleich, nicht die Erfolgsquote: bei κ = 10⁴ scheiterten in der Stichprobe von 10 Programmen 6 NT-Läufe gegen 1 mit Jordan (bei κ = 10⁶ gelingen nur 1 gegen 2 von 10, bei κ = 100 NT 10 gegen Jordan 9; Experiment 3). | – |
-| **Die achsenparallele Ellipse** | `t ≥ 1/p` mit `t ≈ 80` und Dualwerten bis 3·10³ endet an der Rechengenauigkeit; Primal und Dual stimmen auf 10⁻⁵ bis 10⁻⁷, nicht auf 10⁻⁸. Ruiz-Äquilibrierung und ein Rückfall auf Zentrierung helfen nicht (gemessen, nicht eingebaut). | – |
+| **Die achsenparallele Ellipse** | `t ≥ 1/p` mit `t ≈ 80` und Dualwerten bis 3·10³ endet an der Rechengenauigkeit; Primal und Dual stimmen absolut auf 10⁻⁵ (NT, nicht abgeschlossen) bis 10⁻⁷ (Jordan, gelöst); die Toleranz 10⁻⁸ gilt relativ zu max(1, Betrag des Werts), und bei einem Wert um 134 sind 4,8·10⁻⁷ relativ 3,6·10⁻⁹. Ruiz-Äquilibrierung und ein Rückfall auf Zentrierung helfen nicht (gemessen, nicht eingebaut). | – |
 | **Ein Zertifikat liegt vor, wenn der Lauf endet** | Bei Programmen ohne Slater-Punkt und unzulässigen Programmen läuft ein Iterat davon; das Lückenbeispiel hat den Wert −1, das schwach unzulässige Programm keinen Abschluss und kein Zertifikat. Eine homogene Einbettung würde das sauber melden (nicht gebaut). | – |
 | **Eine Iteration kostet wenig** | Ein dichtes KKT-System der Größe Zeilen + Variablen je Iteration; der Vergleich mit der Barriere zählt Iterationen, keine Zeit. | – |
 | **Der Exponentialkegel** | Er ist nicht selbstdual; die Skalierung gilt nicht. | Stück 7 |

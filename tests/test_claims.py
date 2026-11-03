@@ -60,7 +60,7 @@ def test_the_six_forms_with_the_three_steps(variants):
     assert 6 <= variants[("ball_soc", "jordan")]["iterations"] <= 10 and 6 <= variants[("ball_psd", "jordan")]["iterations"] <= 10 and 16 <= variants[("ellipse_psd", "jordan")]["iterations"] <= 24
     for sc in ("nt", "jordan"):                                                                        # achsenparallele Ellipse: Rechengrenze, CPU-abhängig (Entwicklungsrechner: NT endet, Jordan löst; GitHub-Runner: auch Jordan endet)
         hard = variants[("ellipse_axis", sc)]
-        assert hard["status"] != S.OPTIMAL or hard["error"] < 1e-5, sc                                 # ein gemeldeter Erfolg stimmt
+        assert hard["status"] != S.OPTIMAL or hard["relative_error"] <= 10 * C.TOL, sc                 # ein gemeldeter Erfolg stimmt: relativ (das Maß des Abbruchkriteriums) auf 10 · tol
 
 
 def test_the_barrier_needs_more_steps_than_the_primal_dual_iterations_on_every_form(std):
